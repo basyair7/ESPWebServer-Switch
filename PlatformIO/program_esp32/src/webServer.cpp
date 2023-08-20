@@ -1,3 +1,30 @@
+#include <Arduino.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <EEPROM.h>
+#include "webServer.h"
+
+String outputState(int output){
+  if(digitalRead(output)){
+    return "checked";
+  }
+  else {
+    return "";
+  }
+}
+
+// Replaces placeholder with button section in your web page
+String processor(const String& var){
+  if(var == "BUTTONPLACEHOLDER"){
+    String buttons = "";
+    buttons += "<h4>Lampu Ruang Tamu</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_3)+"\" " + outputState(pinRelay_3) + "><span class=\"slider\"></span></label>";
+    buttons += "<h4>Lampu Kamar 1</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_1)+"\" " + outputState(pinRelay_1) + "><span class=\"slider\"></span></label>";
+    buttons += "<h4>Lampu Kamar 2</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_2)+"\" " + outputState(pinRelay_2) + "><span class=\"slider\"></span></label>";
+    return buttons;
+  }
+  return String();
+}
+
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
@@ -57,28 +84,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-// Replaces placeholder with button section in your web page
-String processor(const String& var){
-  if(var == "BUTTONPLACEHOLDER"){
-    String buttons = "";
-    buttons += "<h4>Lampu Ruang Tamu</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_3)+"\" " + outputState(pinRelay_3) + "><span class=\"slider\"></span></label>";
-    buttons += "<h4>Lampu Kamar 1</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_1)+"\" " + outputState(pinRelay_1) + "><span class=\"slider\"></span></label>";
-    buttons += "<h4>Lampu Kamar 2</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_2)+"\" " + outputState(pinRelay_2) + "><span class=\"slider\"></span></label>";
-    return buttons;
-  }
-  return String();
-}
-
-String outputState(int output){
-  if(digitalRead(output)){
-    return "checked";
-  }
-  else {
-    return "";
-  }
-}
-
-void webServerMain() {
+void webServerMain(void) {
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/html", index_html, processor);

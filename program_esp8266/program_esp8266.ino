@@ -4,14 +4,14 @@
 #include <ESPAsyncWebSrv.h>
 
 #ifndef STASSID
-#define STASSID "JTEK-2"
-#define STAPSK "elektro2"
+#define STASSID "@WiFi.com"
+#define STAPSK "Hostpot_ahul7"
 #endif
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
 
-const char* PARAM_INPUT_1 = "output";
+const char* PARAM_INPUT_1 = "output"; 
 const char* PARAM_INPUT_2 = "state";
 
 AsyncWebServer server(80);

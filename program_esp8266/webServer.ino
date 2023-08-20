@@ -1,7 +1,7 @@
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
-  <title>ESP Web Server</title>
+  <title>ESP Web Server (Ruang 1)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <style>
@@ -9,6 +9,10 @@ const char index_html[] PROGMEM = R"rawliteral(
     h2 {font-size: 3.0rem;}
     p {font-size: 3.0rem;}
     body {max-width: 600px; margin:0px auto; padding-bottom: 25px;}
+    .switch-darkmode{position: absolute; width: 45px; height: 22px; right: 20px; top: 20px; border: 2px solid; border-radius: 20px;}
+    .switch-darkmode:before{position: absolute; content: ''; width: 20px; height: 20px; left: 1px; top: 1px; border-radius: 50%; background: #000; cursor: pointer; transition: 0.4s;}
+    .switch-darkmode.active:before{left: 24px; background: #fff;}
+    body.dark{background: #000; color: #fff;}
     .switch {position: relative; display: inline-block; width: 120px; height: 68px} 
     .switch input {display: none}
     .slider {position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 6px}
@@ -18,22 +22,43 @@ const char index_html[] PROGMEM = R"rawliteral(
   </style>
 </head>
 <body>
-  <h2>ESP Web Server</h2>
+  <header><label id="dark-change" class="switch-darkmode"></label></header>
+  <h2>ESP Web Server<br>(Ruang 1)</h2>
   %BUTTONPLACEHOLDER%
-<script>function toggleCheckbox(element) {
-  var xhr = new XMLHttpRequest();
-  if(element.checked){ xhr.open("GET", "/update?output="+element.id+"&state=1", true); }
-  else { xhr.open("GET", "/update?output="+element.id+"&state=0", true); }
-  xhr.send();
-}
-</script>
+  <script>
+    var content = document.getElementsByTagName('body')[0];
+    var darkMode = document.getElementById('dark-change');
+    let getMode = localStorage.getItem('mode');
+
+    if(getMode && getMode === "dark"){
+      darkMode.classList.toggle('active'); content.classList.toggle('dark');
+    }
+    darkMode.addEventListener('click', () => {
+      darkMode.classList.toggle('active');
+      content.classList.toggle('dark');
+      if(!content.classList.contains('dark')){
+        return localStorage.setItem('mode', 'light');
+      }
+      localStorage.setItem('mode', 'dark');
+    });
+
+    function toggleCheckbox(element) {
+      var xhr = new XMLHttpRequest();
+      if(element.checked){ 
+        xhr.open("GET", "/update?output="+element.id+"&state=1", true); 
+      }
+      else { 
+        xhr.open("GET", "/update?output="+element.id+"&state=0", true); 
+      }
+      xhr.send();
+    }
+  </script>
 </body>
 </html>
 )rawliteral";
 
 // Replaces placeholder with button section in your web page
 String processor(const String& var){
-  //Serial.println(var);
   if(var == "BUTTONPLACEHOLDER"){
     String buttons = "";
     buttons += "<h4>Lampu Ruang Tamu</h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\""+String(pinRelay_3)+"\" " + outputState(pinRelay_3) + "><span class=\"slider\"></span></label>";

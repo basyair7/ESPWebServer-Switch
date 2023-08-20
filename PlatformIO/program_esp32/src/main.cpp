@@ -1,32 +1,29 @@
-// Import required libraries
-#include <EEPROM.h>
-#include <WiFi.h>
+#include <Arduino.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <EEPROM.h>
+#include <WiFi.h>
+#include "webServer.h"
 
+// connecting to wifi
 #ifndef STASSID
-#define STASSID "JTE-2"
-#define STAPSK "elektro2"
+#define STASSID "Private"
+#define STAPSK "Rumahmiruk_37"
 #endif
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
-
-const char* PARAM_INPUT_1 = "output";
-const char* PARAM_INPUT_2 = "state";
+int ledState_1 = LOW;
+int ledState_2 = LOW;
+int ledState_3 = LOW;
 
 AsyncWebServer server(80);
-
-#define EEPROM_SIZE 125
-int pinRelay_1 = 2, pinRelay_2 = 4, pinRelay_3 = 33;
-int ledState_1 = LOW, ledState_2 = LOW, ledState_3 = LOW;
-
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   EEPROM.begin(EEPROM_SIZE);
-  
+
   ledState_1 = EEPROM.read(pinRelay_1);
   ledState_2 = EEPROM.read(pinRelay_2);
   ledState_3 = EEPROM.read(pinRelay_3);
@@ -44,8 +41,7 @@ void setup() {
   digitalWrite(pinRelay_3, ledState_3);
 
   WiFi.begin(ssid, password);
-  Serial.println(F("Connecting to WiFi"));
-  while (WiFi.status() != WL_CONNECTED) {
+  while(WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.print(F("."));
   }
@@ -53,12 +49,11 @@ void setup() {
   // Print ESP Local IP Address
   Serial.println(WiFi.localIP());
   webServerMain();
-  // Start server
+  // start server
   server.begin();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  // TODO
 }
-
