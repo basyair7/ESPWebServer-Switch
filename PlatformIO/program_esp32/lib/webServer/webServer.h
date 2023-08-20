@@ -1,9 +1,14 @@
 #include <Arduino.h>
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
+
+#ifndef STASSID
+#define STASSID "Private"
+#define STAPSK "Rumahmiruk_37"
+#endif
 
 #ifndef WEBSERVER_H
 #define WEBSERVER_H
+
+#include <EEPROM.h>
 #define EEPROM_SIZE 125
 #define pinRelay_1 2
 #define pinRelay_2 4
@@ -12,9 +17,7 @@
 #define PARAM_INPUT_2 "state"
 
 extern AsyncWebServer server;
-extern int ledState_1;
-extern int ledState_2;
-extern int ledState_3;
+extern EEPROMClass SaveEEPROM;
 extern void webServerMain(void);
 
 #endif

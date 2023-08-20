@@ -1,32 +1,26 @@
 #include <Arduino.h>
+#include <WiFi.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-#include <EEPROM.h>
-#include <WiFi.h>
-#include "webServer.h"
+#include <webServer.h>
 
 // connecting to wifi
-#ifndef STASSID
-#define STASSID "Private"
-#define STAPSK "Rumahmiruk_37"
-#endif
-
 const char* ssid = STASSID;
 const char* password = STAPSK;
-int ledState_1 = LOW;
-int ledState_2 = LOW;
-int ledState_3 = LOW;
 
 AsyncWebServer server(80);
+EEPROMClass SaveEEPROM;
+
+int ledState_1 = LOW, ledState_2 = LOW, ledState_3 = LOW;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  EEPROM.begin(EEPROM_SIZE);
+  SaveEEPROM.begin(EEPROM_SIZE);
 
-  ledState_1 = EEPROM.read(pinRelay_1);
-  ledState_2 = EEPROM.read(pinRelay_2);
-  ledState_3 = EEPROM.read(pinRelay_3);
+  ledState_1 = SaveEEPROM.read(pinRelay_1);
+  ledState_2 = SaveEEPROM.read(pinRelay_2);
+  ledState_3 = SaveEEPROM.read(pinRelay_3);
 
   Serial.println(F("\nState EEPROM"));
   Serial.print(F("EEPROM 1 : ")); Serial.println(ledState_1);
