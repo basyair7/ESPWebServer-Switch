@@ -7,8 +7,6 @@
 
 #ifndef WEBSERVER_H
 #define WEBSERVER_H
-
-#include <EEPROM.h>
 #define EEPROM_SIZE 125
 #define pinRelay_1 2
 #define pinRelay_2 4
@@ -17,7 +15,6 @@
 #define PARAM_INPUT_2 "state"
 
 extern AsyncWebServer server;
-extern EEPROMClass SaveEEPROM;
 extern void webServerMain(void);
 
 #endif

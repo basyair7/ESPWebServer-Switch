@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 #include <ESPAsyncWebServer.h>
 #include "webServer.h"
 
@@ -84,7 +85,7 @@ String processor(const String& var){
 
 void webServerMain(void) {
   // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send_P(200, "text/html", index_html, processor);
   });
 
@@ -96,9 +97,9 @@ void webServerMain(void) {
     if (request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)) {
       inputMessage1 = request->getParam(PARAM_INPUT_1)->value();
       inputMessage2 = request->getParam(PARAM_INPUT_2)->value();
-      SaveEEPROM.write(inputMessage1.toInt(), inputMessage2.toInt());
+      EEPROM.write(inputMessage1.toInt(), inputMessage2.toInt());
       digitalWrite(inputMessage1.toInt(), inputMessage2.toInt());
-      SaveEEPROM.commit();
+      EEPROM.commit();
     }
     else {
       inputMessage1 = "No message sent";
@@ -111,8 +112,8 @@ void webServerMain(void) {
     request->send(200, "text/plain", "OK");
 
     Serial.println(F("\nState EEPROM"));
-    Serial.print(F("EEPROM 1 : ")); Serial.println(SaveEEPROM.read(pinRelay_1));
-    Serial.print(F("EEPROM 2 : ")); Serial.println(SaveEEPROM.read(pinRelay_2));
-    Serial.print(F("EEPROM 3 : ")); Serial.println(SaveEEPROM.read(pinRelay_3));
+    Serial.print(F("EEPROM 1 : ")); Serial.println(EEPROM.read(pinRelay_1));
+    Serial.print(F("EEPROM 2 : ")); Serial.println(EEPROM.read(pinRelay_2));
+    Serial.print(F("EEPROM 3 : ")); Serial.println(EEPROM.read(pinRelay_3));
   });
 }
