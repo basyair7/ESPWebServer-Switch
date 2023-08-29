@@ -1,8 +1,10 @@
 #include <Arduino.h>
 
 #ifndef STASSID
-#define STASSID "Private"
-#define STAPSK "Rumahmiruk_37"
+// #define STASSID "Private"
+// #define STAPSK "Rumahmiruk_37"
+#define STASSID "@Wifi.com"
+#define STAPSK "Hostpot_ahul7"
 #endif
 
 #ifndef WEBSERVER_H

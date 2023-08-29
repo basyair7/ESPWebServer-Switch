@@ -5,8 +5,8 @@
 #include <ESPAsyncWebServer.h>
 
 #ifndef STASSID
-#define STASSID "JTE-2"
-#define STAPSK "elektro2"
+#define STASSID "@Wifi.com"
+#define STAPSK "Hostpot_ahul7"
 #endif
 
 const char* ssid = STASSID;
