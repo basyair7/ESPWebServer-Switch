@@ -19,7 +19,6 @@
 #define PARAM_INPUT_1 "output"
 #define PARAM_INPUT_2 "state"
 
-extern bool stateManualSwitch_1, stateManualSwitch_2, stateManualSwitch_3;
 extern AsyncWebServer server;
 extern void webServerMain(void);
 
