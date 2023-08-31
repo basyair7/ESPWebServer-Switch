@@ -13,9 +13,13 @@
 #define pinRelay_1 2
 #define pinRelay_2 4
 #define pinRelay_3 33
+#define pinSensor_1 25
+#define pinSensor_2 26
+#define pinSensor_3 27
 #define PARAM_INPUT_1 "output"
 #define PARAM_INPUT_2 "state"
 
+extern bool stateManualSwitch_1, stateManualSwitch_2, stateManualSwitch_3;
 extern AsyncWebServer server;
 extern void webServerMain(void);
 

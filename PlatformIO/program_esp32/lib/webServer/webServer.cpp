@@ -77,13 +77,40 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>
 )rawliteral";
 
-String outputState(int output){
-  if(digitalRead(output)){
+bool stateManualSwitch(int pinSensor) {
+    if(digitalRead(pinSensor) == LOW)
+      return true;
+    else 
+      return false;
+}
+
+String outputState(int pinRelay){
+  if(digitalRead(pinRelay)){
     return "checked";
   }
   else {
     return "";
   }
+}
+
+void returnStateRelay(int pinout, int pininput, int state) {
+  if(stateManualSwitch(pininput) == false && state == 1) {
+    digitalWrite(pinout, HIGH);
+    EEPROM.write(pinout, HIGH);
+  }
+  if(stateManualSwitch(pininput) == false && state == 0) {
+    digitalWrite(pinout, LOW);
+    EEPROM.write(pinout, LOW);
+  }
+  if(stateManualSwitch(pininput) == true && state == 1) {
+    digitalWrite(pinout, LOW);
+    EEPROM.write(pinout, LOW);
+  }
+  if(stateManualSwitch(pininput) == true && state == 0) {
+    digitalWrite(pinout, HIGH);
+    EEPROM.write(pinout, HIGH);
+  }
+  EEPROM.commit();
 }
 
 // Replaces placeholder with button section in your web page
@@ -112,9 +139,12 @@ void webServerMain(void) {
     if (request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)) {
       inputMessage1 = request->getParam(PARAM_INPUT_1)->value();
       inputMessage2 = request->getParam(PARAM_INPUT_2)->value();
-      EEPROM.write(inputMessage1.toInt(), inputMessage2.toInt());
-      digitalWrite(inputMessage1.toInt(), inputMessage2.toInt());
-      EEPROM.commit();
+      if(inputMessage1.toInt() == pinRelay_1) 
+        returnStateRelay(inputMessage1.toInt(), pinSensor_1, inputMessage2.toInt());
+      if(inputMessage1.toInt() == pinRelay_2) 
+        returnStateRelay(inputMessage1.toInt(), pinSensor_2, inputMessage2.toInt());
+      if(inputMessage1.toInt() == pinRelay_3) 
+        returnStateRelay(inputMessage1.toInt(), pinSensor_3, inputMessage2.toInt());
     }
     else {
       inputMessage1 = "No message sent";

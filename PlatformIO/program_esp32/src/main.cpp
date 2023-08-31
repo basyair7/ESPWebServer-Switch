@@ -7,6 +7,7 @@
 
 AsyncWebServer server(80);
 int ledState_1 = LOW, ledState_2 = LOW, ledState_3 = LOW;
+bool stateManualSwitch_1 = false, stateManualSwitch_2 = false, stateManualSwitch_3 = false;
 
 void setup()
 {
@@ -26,6 +27,11 @@ void setup()
     Serial.print(F("EEPROM 3 : "));
     Serial.println(ledState_3);
 
+    // pin sensor
+    pinMode(pinSensor_1, INPUT);
+    pinMode(pinSensor_2, INPUT);
+    pinMode(pinSensor_3, INPUT);
+    // pin relay
     pinMode(pinRelay_1, OUTPUT);
     pinMode(pinRelay_2, OUTPUT);
     pinMode(pinRelay_3, OUTPUT);
@@ -51,5 +57,10 @@ void setup()
 void loop()
 {
     // put your main code here, to run repeatedly:
-    // TODO
+    if(digitalRead(pinSensor_1) == LOW && stateManualSwitch_1 == false) stateManualSwitch_1 = true;
+    if(digitalRead(pinSensor_1) == HIGH && stateManualSwitch_1 == true) stateManualSwitch_1 = false;
+    if(digitalRead(pinSensor_2) == LOW && stateManualSwitch_2 == false) stateManualSwitch_2 = true;
+    if(digitalRead(pinSensor_2) == HIGH && stateManualSwitch_2 == true) stateManualSwitch_2 = false;
+    if(digitalRead(pinSensor_3) == LOW && stateManualSwitch_3 == false) stateManualSwitch_3 = true;
+    if(digitalRead(pinSensor_3) == HIGH && stateManualSwitch_3 == true) stateManualSwitch_3 = false;
 }
